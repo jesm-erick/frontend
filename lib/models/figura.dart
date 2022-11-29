@@ -1,50 +1,19 @@
 import 'dart:ui';
 
-class Figura {
+class Welcome {
   Image image;
-  String id;
+  String _id;
   String name;
-  DateTime createdAt;
-  DateTime updatedAt;
-  Figura(
-      {required this.image,
-      required this.id,
-      required this.name,
-      required this.createdAt,
-      required this.updatedAt});
-  factory Figura.fromJson(Map<String, dynamic> json) => Figura(
-      image: Image.fromJson(json["image"]),
-      id: json["_id"],
-      name: json["name"],
-      createdAt: DateTime.parse(json["createdAt"]),
-      updatedAt: DateTime.parse(json["updatedAt"]));
-
-  Map<String, dynamic> toJson() => {
-        "image": image.toJson(),
-        "_id": id,
-        "name": name,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+  Welcome(
+    this.image,
+    this._id,
+    this.name,
+  );
 }
-//
 
 class Image {
-  Image({
-    required this.publicId,
-    required this.secureUrl,
-  });
+  String public_Id;
+  String secure_Url;
 
-  String publicId;
-  String secureUrl;
-
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
-        publicId: json["public_id"],
-        secureUrl: json["secure_url"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "public_id": publicId,
-        "secure_url": secureUrl,
-      };
+  Image(this.public_Id, this.secure_Url);
 }
