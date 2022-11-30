@@ -14,26 +14,68 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final url = Uri.parse("http://192.168.229.33:3000/figura");
-
+  final url = Uri.parse("http://192.168.1.7:3000/figura");
+//dsadsadsads
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Imagenes App',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Imagenes App'),
-        ),
-        body: Center(
-          child: Container(
-            child: Text('hola mundo XD'),
+          appBar: AppBar(
+            title: Text('Imagenes App'),
           ),
-        ),
-      ),
+          body: FutureBuilder(
+            future: _listado,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView(
+                  children: _listadoImagen(snapshot.data),
+                );
+              } else if (snapshot.hasError) {
+                print(snapshot.error);
+                return Text("error");
+              }
+
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            },
+          )),
     );
   }
 
+  List<Widget> _listadoImagen(List<Welcome> data) {
+    List<Widget> welcome = [];
+
+    for (var element in data) {
+      //print(element.image);
+
+      welcome.add(Card(
+          child: Column(
+        children: [
+          //Image.network(element.url),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              element.name,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+            ),
+          ),
+          const SizedBox(
+            width: 100,
+            height: 20,
+          ),
+          Image(
+            image: NetworkImage((element.image)),
+          ),
+        ],
+      )));
+    }
+    return welcome;
+  }
+
+//XDDDD
   Future<List<Welcome>> _listado;
   Future<List<Welcome>> getImagenes() async {
     final response = await http.get(url);
@@ -46,12 +88,13 @@ class _MyAppState extends State<MyApp> {
       final jsonData = jsonDecode(body);
       //print(jsonData is Object);
       for (var item in jsonData) {
-        print(item);
+        //print(item);
         //welcome.add(Welcome(item["image"]["secure_url"], item["id"], item["name"]));
 
-        welcome.add(Welcome(item["image"], item["_id"], item["name"]));
+        welcome.add(
+            Welcome(item["image"]["secure_url"], item["_id"], item["name"]));
       }
-
+      //print(welcome);
       return welcome;
     } else {
       throw Exception("fallo la conexion");
